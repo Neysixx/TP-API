@@ -34,5 +34,23 @@ services:
       - .:/app
       - /app/node_modules
 
+  test:
+    build: .
+    container_name: task_manager_tests
+    depends_on:
+      - api
+    environment:
+      API_URL: http://api:3000/api
+    command: >
+      sh -c "
+        echo 'Attente du démarrage de l API...' &&
+        sleep 15 &&
+        echo 'Lancement des tests...' &&
+        node test/test-api.js
+      "
+    volumes:
+      - .:/app
+      - /app/node_modules
+
 volumes:
   mysql_data:
